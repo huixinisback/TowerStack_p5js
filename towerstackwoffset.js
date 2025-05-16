@@ -10,6 +10,7 @@ function preload() {
   bg = loadImage('assets/citybackground.png');
   platform = loadImage('assets/towerbase.png')
   tower = loadImage('assets/tower.png');
+  towerblock = loadImage('assets/tower.png');
   redcrane = loadImage('assets/crane.png');
 }
 
@@ -22,14 +23,7 @@ function setup() {
   towerbase.img=platform;
   // crane (static visual or moving object)
   crane = new Sprite(400, 100, 100, 20, 'static');
-  //Helper objects for where the new block should attach to.
-  craneside1 = new Sprite(350, 100, 20, 20, 'dynamic');
-  craneside2 = new Sprite(450, 100, 20, 20, 'dynamic');
-  craneside1.visible = false;
-  craneside2.visible = false;
   crane.img = redcrane;
-  weldcrane1 = new GlueJoint(craneside1,crane);
-  weldcrane2 = new GlueJoint(craneside2,crane);
 
   // spawn first block
   spawnBlock();
@@ -67,21 +61,24 @@ function draw() {
 }
 
 function spawnBlock() {
-  block = new Sprite(crane.x, crane.y + 60, 80, 55);
-  block.img = loadImage('assets/tower.png');
+  block = new Sprite(crane.x, crane.y + 50, 80, 55);
+  block.img = towerblock;
+  block.mass = 0.5
 
   // attach to crane with a DistanceJoint
   joint = new DistanceJoint(crane, block);
   joint.frequency = 0;
-  joint.damping = 0;
-  joint.springiness = 0.5;
+  joint.damping = 1;
+  joint.springiness = 0.6;
   joint.offsetA.x = -50;
   joint.offsetB.x = -5;
+  joint.collideConnected = true;
   joint2 = new DistanceJoint(crane, block);
   joint2.frequency = 0;
-  joint2.damping = 0;
-  joint2.springiness = 0.5;
+  joint2.damping = 1;
+  joint2.springiness = 0.6;
   joint2.offsetA.x = 50;
   joint2.offsetB.x = 5 ;
+  joint2.collideConnected = true;
   blockReady = true;
 }
